@@ -9,6 +9,7 @@ import path from "path";
 import { connectDB } from "./lib/db.js";
 
 import { clerkMiddleware } from '@clerk/express';
+import job from "./lib/cron.js";
 
 const app = express();
 
@@ -35,5 +36,7 @@ if(fs.existsSync(publicDir)){           /* does the "public" folder exists? (onl
 
 app.listen(PORT, () => {    
     connectDB();
-    console.log("Server is listening at the PORT:",PORT)
+    console.log("Server is listening at the PORT:",PORT);
+
+    if(process.env.NODE_ENV === "production") job.start();
 });
